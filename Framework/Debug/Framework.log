@@ -1,0 +1,4 @@
+﻿  game.cpp
+C:\Users\11488\Desktop\BCIS\Game programming practice\COMP710-2020-S2\students\yuanhao.li\GP2DFramework2020-SpaceInvaders\Framework\game.cpp(72,52): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\11488\Desktop\BCIS\Game programming practice\COMP710-2020-S2\students\yuanhao.li\GP2DFramework2020-SpaceInvaders\Framework\game.cpp(72,39): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  Framework.vcxproj -> C:\Users\11488\Desktop\BCIS\Game programming practice\COMP710-2020-S2\students\yuanhao.li\GP2DFramework2020-SpaceInvaders\Debug\Framework.exe
