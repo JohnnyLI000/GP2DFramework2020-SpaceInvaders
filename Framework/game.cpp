@@ -251,6 +251,10 @@ Game::Draw(BackBuffer& backBuffer)
 
 	backBuffer.Clear();
 
+
+	m_pBackBuffer->SetTextColour(255, 0, 0);
+	m_pBackBuffer->DrawText(50, 50, "hello123123213");
+
 	// SS04.5: Draw all enemy aliens in container...
 	for (Enemy* enemy : enemyList)
 	{

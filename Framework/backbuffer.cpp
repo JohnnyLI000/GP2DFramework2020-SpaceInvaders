@@ -8,12 +8,12 @@
 #include "texturemanager.h"
 #include "sprite.h"
 #include "texture.h"
+#include "SDL_ttf.h"
 
 // Library includes:
 #include <SDL.h>
 #include <SDL_image.h>
 #include <cassert>
-
 BackBuffer::BackBuffer()
 : m_pTextureManager(0)
 , m_pWindow(0)
@@ -23,6 +23,9 @@ BackBuffer::BackBuffer()
 , m_clearRed(0)
 , m_clearGreen(0)
 , m_clearBlue(0)
+, m_textRed(0)
+, m_textGreen(0)
+, m_textBlue(0)
 {
 
 }
@@ -32,7 +35,7 @@ BackBuffer::~BackBuffer()
 	SDL_DestroyRenderer(m_pRenderer);
 	m_pRenderer = 0;
 
-	SDL_DestroyWindow(m_pWindow);
+	SDL_DestroyWindow(m_pWindow); 
 	m_pWindow = 0;
 
 	IMG_Quit();
@@ -86,6 +89,10 @@ BackBuffer::Initialise(int width, int height)
 
 	SetFullscreen(false);
 	SDL_Delay(1000);
+
+	TTF_Init();
+	TTF_OpenFont("assets\\arial.ttf", 20);
+	
 
 	m_pTextureManager = new TextureManager();
 	assert(m_pTextureManager);
@@ -194,4 +201,34 @@ BackBuffer::SetClearColour(unsigned char r, unsigned char g, unsigned char b)
 	m_clearRed = r;
 	m_clearGreen = g;
 	m_clearBlue = b;
+}
+void
+BackBuffer::SetTextColour(unsigned char r, unsigned char g, unsigned char b)
+{
+	m_textRed = r;
+	m_textGreen = g;
+	m_textBlue = b;
+}
+
+void BackBuffer::DrawText(int x, int y, const char* pcText)
+{
+	SDL_Color colour;
+	colour.r = m_textRed;
+	colour.g = m_textGreen;
+	colour.b = m_textBlue;
+	colour.a = 255;
+
+	SDL_Surface* SDLSurface = TTF_RenderText_Solid(	TTF_OpenFont("assets\\arial.ttf", 400), pcText, colour);
+	SDL_Texture* Texture = SDL_CreateTextureFromSurface(m_pRenderer, SDLSurface);
+	SDL_QueryTexture(Texture, NULL, NULL, &SDLSurface->w, &SDLSurface->h);
+	
+	SDL_Rect destRect;
+	destRect.x =x;
+	destRect.y = y;
+	destRect.w = SDLSurface->w;
+	destRect.h = SDLSurface->h;
+
+	SDL_RenderCopy(m_pRenderer, Texture, &destRect, &destRect);
+	SDL_DestroyTexture(Texture);
+	SDL_FreeSurface(SDLSurface);
 }

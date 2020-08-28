@@ -1,3 +1,7 @@
 
 .vs/Framework/v16/Browse.VC.opendb
 .vs/Framework/v16/Browse.VC.db
+*.db
+*.opendb
+*.db
+.vs/GP2DFramework2020-SpaceInvaders/v16/Browse.VC.db

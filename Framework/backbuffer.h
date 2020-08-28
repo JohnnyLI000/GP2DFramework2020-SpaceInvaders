@@ -1,7 +1,7 @@
 // COMP710 GP 2D Framework 2020
 #ifndef __BACKBUFFER_H__
 #define __BACKBUFFER_H__
-
+#include "SDL_ttf.h"
 // Forward Declarations:
 class TextureManager;
 class Sprite;
@@ -34,7 +34,18 @@ public:
 	void DrawLine(int x1, int y1, int x2, int y2);
 
 	Sprite* CreateSprite(const char* pcFilename);
-	
+
+	void SetTextColour(unsigned char r, unsigned char g, unsigned
+		char b);
+	 void DrawText(int x, int y, const char* pcText);
+
+	 TTF_Font* m_pDebugFont;
+	  unsigned char m_textRed;
+	  unsigned char m_textGreen;
+	  unsigned char m_textBlue;
+
+
+
 protected:
 	void LogSDLError();
 
