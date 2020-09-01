@@ -22,7 +22,7 @@ Game&
 Game::GetInstance()
 {
 	if (sm_pInstance == 0)
-	{ 
+	{
 		sm_pInstance = new Game();
 	}
 
@@ -31,30 +31,30 @@ Game::GetInstance()
 	return (*sm_pInstance);
 }
 
-void 
+void
 Game::DestroyInstance()
 {
-	delete sm_pInstance; 
+	delete sm_pInstance;
 	sm_pInstance = 0;
 }
 
 Game::Game()
-: m_pBackBuffer(0)
-, m_pInputHandler(0)
-, m_looping(true)
-, m_executionTime(0)
-, m_elapsedSeconds(0)
-, m_frameCount(0)
-, m_FPS(0)
-, m_numUpdates(0)
-, m_lastTime(0)
-, m_lag(0)
-, m_Playership()
-, pPlayerSprite()
-, m_Enemy()
-, pEnemySprite()
+	: m_pBackBuffer(0)
+	, m_pInputHandler(0)
+	, m_looping(true)
+	, m_executionTime(0)
+	, m_elapsedSeconds(0)
+	, m_frameCount(0)
+	, m_FPS(0)
+	, m_numUpdates(0)
+	, m_lastTime(0)
+	, m_lag(0)
+	, m_Playership()
+	, pPlayerSprite()
+	, m_Enemy()
+	, pEnemySprite()
 {
-	
+
 }
 
 Game::~Game()
@@ -63,7 +63,7 @@ Game::~Game()
 	m_pBackBuffer = 0;
 }
 
-bool 
+bool
 Game::Initialise()
 {
 
@@ -93,7 +93,7 @@ Game::Initialise()
 	// ...not just a local variable of this function!
 	m_Playership = new Playership();
 	pPlayerSprite = new Sprite();
-	
+
 	// SS04.4: Create the player ship instance.
 	pPlayerSprite = m_pBackBuffer->CreateSprite("assets\\playership.png");
 	m_Playership->Initialise(pPlayerSprite);
@@ -107,30 +107,34 @@ Game::Initialise()
 	// SS04.6: Fill the container with these new enemies.
 	pBullet = new Sprite();
 	pBullet = m_pBackBuffer->CreateSprite("assets\\playerbullet.png");
+
+	pExplosion = new AnimatedSprite();
+	pExplosion = m_pBackBuffer->CreateAnimatedSprite("assets\\explosion.png");
+
 	m_pBackBuffer->clearSprite();
 	return (true);
 }
 
-bool 
+bool
 Game::DoGameLoop()
 {
 	const float stepSize = 1.0f / 60.0f;
 
 	assert(m_pInputHandler);
 	m_pInputHandler->ProcessInput(*this);
-	
+
 	if (m_looping)
 	{
 		Uint64 current = SDL_GetPerformanceCounter();
 
 		float deltaTime = (current - m_lastTime) / static_cast<float>(SDL_GetPerformanceFrequency());
-		
+
 		m_lastTime = current;
 
 		m_executionTime += deltaTime;
 
 		Process(deltaTime);
-	
+
 		m_lag += deltaTime;
 
 		int innerLag = 0;
@@ -153,7 +157,7 @@ Game::DoGameLoop()
 	return (m_looping);
 }
 
-void 
+void
 Game::Process(float deltaTime)
 {
 	// Count total simulation time elapsed:
@@ -183,6 +187,9 @@ Game::Process(float deltaTime)
 	// SS04.4: Update player...
 	m_Playership->Process(deltaTime);
 
+
+	int collideX, collideY;
+	
 	// SS04.6: Check for bullet vs alien enemy collisions...
 	// SS04.6: For each bullet
 	// SS04.6: For each alien enemy
@@ -194,26 +201,40 @@ Game::Process(float deltaTime)
 		{
 			isCollide = bullet->IsCollidingWith(*enemy);
 			if (isCollide) {
+
+
+				generateExplosion(bullet->GetPositionX(), bullet->GetPositionY());
+				explosionList.push_back(m_Explosion);
+
+				
 				bulletList.erase(std::find(bulletList.begin(), bulletList.end() - 1, bullet));
 				enemyList.erase(std::find(enemyList.begin(), enemyList.end() - 1, enemy));
 
-				//char buffer[64];
-				//sprintf(buffer, "bullet position x: %f", bullet->GetPositionX());
-				//LogManager::GetInstance().Log(buffer);
 
-				// buffer[64];
-				//sprintf(buffer, "bullet position y: %f", bullet->GetPositionY());
-				//LogManager::GetInstance().Log(buffer);
+				/*		for (Explosion* explosion : explosionList)
+						{
+							if (explosion->IsPaused()) {
+								explosionList.erase(std::find(explosionList.begin(), explosionList.end() - 1, m_Explosion));
+							}
+						}*/
 
-				// buffer[64];
-				//sprintf(buffer, "enemy position x: %f", enemy->GetPositionX());
-				//LogManager::GetInstance().Log(buffer);
+						//char buffer[64];
+						//sprintf(buffer, "bullet position x: %f", bullet->GetPositionX());
+						//LogManager::GetInstance().Log(buffer);
 
-				//buffer[64];
-				//sprintf(buffer, "enemy position y: %f", enemy->GetPositionY());
-				//LogManager::GetInstance().Log(buffer);	
+						// buffer[64];
+						//sprintf(buffer, "bullet position y: %f", bullet->GetPositionY());
+						//LogManager::GetInstance().Log(buffer);
 
-				break;
+						// buffer[64];
+						//sprintf(buffer, "enemy position x: %f", enemy->GetPositionX());
+						//LogManager::GetInstance().Log(buffer);
+
+						//buffer[64];
+						//sprintf(buffer, "enemy position y: %f", enemy->GetPositionY());
+						//LogManager::GetInstance().Log(buffer);	
+
+				continue;
 
 			}
 
@@ -225,7 +246,7 @@ Game::Process(float deltaTime)
 		//sprintf(buffer, "bulletList size: %d", bulletList.size());
 		//LogManager::GetInstance().Log(buffer);
 
-		if (bullet->GetPositionY() <0)
+		if (bullet->GetPositionY() < 0)
 		{
 			//char buffer[64];
 			//sprintf(buffer, "bullet position of height: %f", bullet->GetPositionY());
@@ -233,27 +254,32 @@ Game::Process(float deltaTime)
 			bulletList.erase(std::find(bulletList.begin(), bulletList.end() - 1, bullet));
 		}
 	}
-	
+
+
+	for (Explosion* explosion : explosionList)
+	{
+		explosion->Process(deltaTime);
+		if (explosion->IsPaused())
+		{
+			explosion->~Explosion();
+		}
+	}
 	// SS04.6: If collided, destory both and spawn explosion.
 
 	// SS04.6: Remove any dead bullets from the container...
-	 
+
 	// SS04.6: Remove any dead enemy aliens from the container...
 
 	// SS04.6: Remove any dead explosions from the container...
 
 }
 
-void 
+void
 Game::Draw(BackBuffer& backBuffer)
 {
 	++m_frameCount;
 
 	backBuffer.Clear();
-
-
-	m_pBackBuffer->SetTextColour(255, 0, 0);
-	m_pBackBuffer->DrawText(50, 50, "hello123123213");
 
 	// SS04.5: Draw all enemy aliens in container...
 	for (Enemy* enemy : enemyList)
@@ -269,10 +295,20 @@ Game::Draw(BackBuffer& backBuffer)
 	}
 	// SS04.4: Draw the player ship...
 	m_Playership->Draw(backBuffer);
+
+
+	for (Explosion* explosion : explosionList)
+	{
+		explosion->Draw(backBuffer);
+	}
+
+
+	//m_pBackBuffer->SetTextColour(255, 0, 0);
+	//m_pBackBuffer->DrawText(100, 100, "hello123123213");
 	backBuffer.Present();
 }
 
-void 
+void
 Game::Quit()
 {
 	m_looping = false;
@@ -325,6 +361,18 @@ Game::FireSpaceShipBullet()
 	// SS04.6: Add the new bullet to the bullet container.
 	bulletList.push_back(m_Bullet);
 }
+void::
+Game::generateExplosion(int x, int y) {
+	m_Explosion = new Explosion();
+	m_Explosion->Initialise(*pExplosion->GetTexture());
+	m_Explosion->SetFrameSpeed(0.1f);
+	m_Explosion->SetLooping(false);
+	m_Explosion->SetX(x);
+	m_Explosion->SetY(y);
+	explosionList.push_back(m_Explosion);
+
+}
+
 
 // SS04.5: Spawn a Enemy in game.
 void
@@ -346,5 +394,4 @@ Game::SpawnEnemy(float x, float y)
 	//sprintf(buffer, "%p", m_Enemy);
 	//LogManager::GetInstance().Log(buffer);
 	enemyList.push_back(m_Enemy);
-
 }

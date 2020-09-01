@@ -4,6 +4,7 @@
 #include <list>
 #include "Bullet.h"
 #include <vector>
+#include "Explosion.h"
 #ifndef __GAME_H__
 #define __GAME_H__
 
@@ -64,8 +65,13 @@ protected:
 
 	Sprite* pEnemySprite;
 	Enemy* m_Enemy;
+
+	AnimatedSprite* pExplosion;
+	Explosion* m_Explosion;
+
 	std::vector<Enemy*> enemyList;
 	std::vector<Bullet*> bulletList;
+	std::vector<Explosion*> explosionList;
 
 	Sprite* pBullet;
 	Bullet* m_Bullet;
@@ -79,6 +85,11 @@ protected:
 	// SS04.6: Add a bullet container field.
 
 private:
+
+
+
+
+	void generateExplosion(int x, int y);
 
 };
 

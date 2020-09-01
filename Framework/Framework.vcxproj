@@ -81,10 +81,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="animatedsprite.h" />
     <ClInclude Include="backbuffer.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="entity.h" />
+    <ClInclude Include="Explosion.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="Playership.h" />
     <ClInclude Include="inputhandler.h" />
@@ -94,10 +96,12 @@
     <ClInclude Include="texturemanager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="animatedsprite.cpp" />
     <ClCompile Include="backbuffer.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="entity.cpp" />
+    <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="inputhandler.cpp" />
     <ClCompile Include="logmanager.cpp" />

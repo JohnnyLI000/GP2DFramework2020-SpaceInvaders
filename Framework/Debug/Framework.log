@@ -1,9 +1,8 @@
-﻿  backbuffer.cpp
-  entity.cpp
-C:\Users\11488\Desktop\BCIS\Game programming practice\COMP710-2020-S2\students\yuanhao.li\GP2DFramework2020-SpaceInvaders\Framework\entity.cpp(65,29): warning C4305: 'initializing': truncation from 'double' to 'float'
-  game.cpp
+﻿  game.cpp
 C:\Users\11488\Desktop\BCIS\Game programming practice\COMP710-2020-S2\students\yuanhao.li\GP2DFramework2020-SpaceInvaders\Framework\game.cpp(72,52): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
 C:\Users\11488\Desktop\BCIS\Game programming practice\COMP710-2020-S2\students\yuanhao.li\GP2DFramework2020-SpaceInvaders\Framework\game.cpp(72,39): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-  sprite.cpp
-  Generating Code...
+C:\Users\11488\Desktop\BCIS\Game programming practice\COMP710-2020-S2\students\yuanhao.li\GP2DFramework2020-SpaceInvaders\Framework\game.cpp(206,67): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\11488\Desktop\BCIS\Game programming practice\COMP710-2020-S2\students\yuanhao.li\GP2DFramework2020-SpaceInvaders\Framework\game.cpp(206,43): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\11488\Desktop\BCIS\Game programming practice\COMP710-2020-S2\students\yuanhao.li\GP2DFramework2020-SpaceInvaders\Framework\game.cpp(191,16): warning C4101: 'collideY': unreferenced local variable
+C:\Users\11488\Desktop\BCIS\Game programming practice\COMP710-2020-S2\students\yuanhao.li\GP2DFramework2020-SpaceInvaders\Framework\game.cpp(191,6): warning C4101: 'collideX': unreferenced local variable
   Framework.vcxproj -> C:\Users\11488\Desktop\BCIS\Game programming practice\COMP710-2020-S2\students\yuanhao.li\GP2DFramework2020-SpaceInvaders\Debug\Framework.exe

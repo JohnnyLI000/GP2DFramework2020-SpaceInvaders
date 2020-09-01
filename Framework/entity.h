@@ -1,7 +1,6 @@
 // COMP710 GP 2D Framework 2020
 #ifndef __ENTITY_H__
 #define __ENTITY_H__
-
 // Forward Declarations:
 class BackBuffer;
 class Sprite;

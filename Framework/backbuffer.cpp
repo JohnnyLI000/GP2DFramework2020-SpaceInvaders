@@ -14,6 +14,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <cassert>
+#include "animatedsprite.h"
 BackBuffer::BackBuffer()
 : m_pTextureManager(0)
 , m_pWindow(0)
@@ -91,7 +92,6 @@ BackBuffer::Initialise(int width, int height)
 	SDL_Delay(1000);
 
 	TTF_Init();
-	TTF_OpenFont("assets\\arial.ttf", 20);
 	
 
 	m_pTextureManager = new TextureManager();
@@ -154,7 +154,24 @@ BackBuffer::DrawSprite(Sprite& sprite)
 
 	SDL_RenderCopy(m_pRenderer, sprite.GetTexture()->GetTexture(), 0, &dest);
 }
+void
+BackBuffer::DrawAnimatedSprite(Sprite& sprite,int srcX,int frameWidth)
+{
+	SDL_Rect dest,src;
+	
+	src.x = srcX;
+	src.y = 0;
+	src.w = sprite.GetWidth()/5;
+	src.h = sprite.GetHeight();
 
+	dest.x = sprite.GetX();
+	dest.y = sprite.GetY();
+	dest.w = sprite.GetWidth()/5;
+	dest.h = sprite.GetHeight();
+	SDL_RenderCopy(m_pRenderer, sprite.GetTexture()->GetTexture(), &src, &dest);
+
+	//destination and source relationship : when you move your x or y , you have to minus the width and height in repsectively 
+}
 void
 BackBuffer::DrawRectangle(int x1, int y1, int x2, int y2)
 {
@@ -195,6 +212,21 @@ BackBuffer::CreateSprite(const char* pcFilename)
 	return (pSprite);
 }
 
+AnimatedSprite*
+BackBuffer::CreateAnimatedSprite(const char* pcFilename)
+{
+	assert(m_pTextureManager);
+	Texture* pTexture = m_pTextureManager->GetTexture(pcFilename);
+
+	AnimatedSprite* pSprite = new AnimatedSprite();
+	if (!pSprite->Initialise(*pTexture))
+	{
+		LogManager::GetInstance().Log("Sprite Failed to Create!");
+	}
+
+	return (pSprite);
+}
+
 void 
 BackBuffer::SetClearColour(unsigned char r, unsigned char g, unsigned char b)
 {
@@ -218,15 +250,19 @@ void BackBuffer::DrawText(int x, int y, const char* pcText)
 	colour.b = m_textBlue;
 	colour.a = 255;
 
-	SDL_Surface* SDLSurface = TTF_RenderText_Solid(	TTF_OpenFont("assets\\arial.ttf", 400), pcText, colour);
+	SDL_Surface* SDLSurface = TTF_RenderText_Solid(	TTF_OpenFont("assets\\ariblk.ttf", 20), pcText, colour);
 	SDL_Texture* Texture = SDL_CreateTextureFromSurface(m_pRenderer, SDLSurface);
 	SDL_QueryTexture(Texture, NULL, NULL, &SDLSurface->w, &SDLSurface->h);
 	
 	SDL_Rect destRect;
-	destRect.x =x;
-	destRect.y = y;
+	destRect.x = 0;
+	destRect.y = 0;
 	destRect.w = SDLSurface->w;
 	destRect.h = SDLSurface->h;
+
+	char buffer[64];
+	sprintf(buffer, "%d", destRect.h);
+	LogManager::GetInstance().Log(buffer);
 
 	SDL_RenderCopy(m_pRenderer, Texture, &destRect, &destRect);
 	SDL_DestroyTexture(Texture);
