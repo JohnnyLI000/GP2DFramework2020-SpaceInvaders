@@ -114,7 +114,7 @@ AnimatedSprite::Draw(BackBuffer& backbuffer)
 //	backbuffer.DrawAnimatedSprite(*this, 128);
 	if (!IsPaused())
 	{
-		backbuffer.DrawAnimatedSprite(*this, m_frameCoordinates.at(m_currentFrame), m_frameWidth);
+		backbuffer.DrawAnimatedSprite(*this, m_frameCoordinates.at(m_currentFrame), m_frames );
 	}
 	//for (int i = 0; i < m_frameCoordinates.size(); i++)
 	//{

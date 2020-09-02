@@ -201,22 +201,11 @@ Game::Process(float deltaTime)
 		{
 			isCollide = bullet->IsCollidingWith(*enemy);
 			if (isCollide) {
-
-
 				generateExplosion(bullet->GetPositionX(), bullet->GetPositionY());
-				explosionList.push_back(m_Explosion);
-
-				
 				bulletList.erase(std::find(bulletList.begin(), bulletList.end() - 1, bullet));
 				enemyList.erase(std::find(enemyList.begin(), enemyList.end() - 1, enemy));
-
-
-				/*		for (Explosion* explosion : explosionList)
-						{
-							if (explosion->IsPaused()) {
-								explosionList.erase(std::find(explosionList.begin(), explosionList.end() - 1, m_Explosion));
-							}
-						}*/
+				bullet->~Bullet();
+				enemy->~Enemy();
 
 						//char buffer[64];
 						//sprintf(buffer, "bullet position x: %f", bullet->GetPositionX());
